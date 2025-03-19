@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barışalım mı? ❤️</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 100px;
+        }
+        h1 {
+            color: #ff4081;
+        }
+        .container {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .yes-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .no-btn {
+            background-color: #f44336;
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Barışalım mı? ❤️</h1>
+    <p>Lütfen doğru cevabı seç 😊</p>
+    
+    <div class="container">
+        <button class="yes-btn" onclick="yesClick()">Evet</button>
+        <button class="no-btn" id="noButton">Hayır</button>
+    </div>
+
+    <script>
+        const noButton = document.getElementById("noButton");
+
+        noButton.addEventListener("mouseover", function() {
+            const maxX = window.innerWidth - 100; // Ekran sınırlarını aşmasın
+            const maxY = window.innerHeight - 100;
+
+            let x = Math.random() * maxX;
+            let y = Math.random() * maxY;
+
+            // Butonun tamamen ekrandan çıkmasını engelle
+            if (x < 50) x = 50;
+            if (y < 50) y = 50;
+
+            noButton.style.left = `${x}px`;
+            noButton.style.top = `${y}px`;
+        });
+
+        function yesClick() {
+            alert("Biliyorum, sen de barışmak istiyorsun! ❤️");
+        }
+    </script>
+
+</body>
+</html>
