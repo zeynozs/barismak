@@ -1,78 +1,383 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barışalım mı? ❤️</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin-top: 100px;
-        }
-        h1 {
-            color: #ff4081;
-        }
-        .container {
-            position: relative;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin: 10px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .yes-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .no-btn {
-            background-color: #f44336;
-            color: white;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Manevi Melodi Üretici</title>
+<style>
+  :root{
+    --bg1: #ffeaf8;
+    --bg2: #e7f3ff;
+    --accent: #ff8fd6;
+    --text: #2b2b2b;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2),#fff6ec);
+    background-size: 400% 400%;
+    animation:grad 12s ease-in-out infinite;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  @keyframes grad{
+    0%{background-position:0% 0%}
+    50%{background-position:100% 100%}
+    100%{background-position:0% 0%}
+  }
+
+  .card{
+    width:100%;
+    max-width:760px;
+    background:rgba(255,255,255,0.85);
+    border-radius:18px;
+    padding:28px;
+    box-shadow:0 12px 30px rgba(20,20,40,0.12);
+    backdrop-filter: blur(6px);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  h1{margin:0 0 6px;font-size:26px;letter-spacing:0.2px;}
+  p.lead{margin:0;color:#555;font-size:15px}
+
+  .controls{
+    margin-top:20px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  button.primary{
+    background:linear-gradient(180deg,var(--accent),#ff63c4);
+    color:white;
+    border:none;
+    padding:14px 28px;
+    font-size:16px;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow: 0 8px 20px rgba(255,120,180,0.18);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  button.primary:active{transform:translateY(2px)}
+  button.ghost{
+    background:transparent;
+    border:1px solid rgba(80,80,90,0.08);
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+  }
+
+  .msg{
+    margin-top:18px;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color:#3c3c3c;
+    opacity:0;
+    transition:opacity .5s, transform .5s;
+    transform: translateY(8px);
+  }
+  .msg.show{opacity:1; transform: translateY(0);}
+
+  .small{
+    font-size:13px;
+    color:#666;
+    margin-top:10px;
+  }
+
+  /* heart animation */
+  .hearts{
+    position:absolute;
+    pointer-events:none;
+    inset:0;
+    overflow:hidden;
+  }
+  .heart{
+    position:absolute;
+    width:22px;
+    height:22px;
+    transform: translate(-50%,-50%) scale(0.9);
+    opacity:0.95;
+    animation:float linear infinite;
+  }
+  .heart::before,.heart::after{
+    content:"";
+    position:absolute;
+    left:11px;
+    top:0;
+    width:11px;
+    height:17px;
+    background:linear-gradient(180deg,#ff9ed9,#ff6fbf);
+    border-radius:11px 11px 0 0;
+    transform:rotate(-45deg);
+  }
+  .heart::after{
+    left:0;
+    transform:rotate(45deg);
+  }
+  @keyframes float{
+    0%{transform:translate(-50%,120%) scale(0.6); opacity:0}
+    10%{opacity:0.95}
+    70%{opacity:0.9}
+    100%{transform:translate(-50%,-120%) scale(1); opacity:0}
+  }
+
+  /* responsive */
+  @media (max-width:520px){
+    .card{padding:18px;border-radius:14px}
+    h1{font-size:20px}
+    button.primary{padding:12px 20px;font-size:15px}
+  }
+
+  /* dark toggle visuals */
+  .toggles{display:flex;gap:8px;align-items:center}
+  label.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+  input[type=checkbox]{display:none}
+  .pill{
+    width:44px;height:26px;border-radius:20px;background:#efefef;position:relative;padding:3px;transition:background .2s;
+  }
+  .pill .dot{width:20px;height:20px;border-radius:50%;background:white;position:absolute;left:3px;top:3px;transition:left .18s}
+  input[type=checkbox]:checked + .pill{background:#2d2d2d}
+  input[type=checkbox]:checked + .pill .dot{left:21px}
+
+</style>
 </head>
 <body>
+  <div class="card" role="main">
+    <h1>Manevi Melodi Üretici 🎵</h1>
+    <p class="lead">Bir dokunuşla kısa, huzur veren bir melodi çalar ve tatlı bir mesaj gösterir.</p>
 
-    <h1>Barışalım mı? ❤️</h1>
-    <p>Lütfen doğru cevabı seç 😊</p>
-    
-    <div class="container">
-        <button class="yes-btn" onclick="yesClick()">Evet</button>
-        <button class="no-btn" id="noButton">Hayır</button>
+    <div class="controls" aria-hidden="false">
+      <button id="playBtn" class="primary" aria-pressed="false">Hisset ve Dinle</button>
+
+      <div class="toggles" title="Seçenekler" aria-hidden="true">
+        <label class="switch" style="font-size:13px">
+          <input id="reverbToggle" type="checkbox" />
+          <span class="pill"><span class="dot"></span></span>
+        </label>
+        <div style="font-size:13px;color:#666">Reverb</div>
+
+        <label class="switch" style="margin-left:8px;font-size:13px">
+          <input id="nightToggle" type="checkbox" />
+          <span class="pill"><span class="dot"></span></span>
+        </label>
+        <div style="font-size:13px;color:#666">Gece</div>
+      </div>
     </div>
 
-    <script>
-        const noButton = document.getElementById("noButton");
+    <div id="msg" class="msg" aria-live="polite"></div>
+    <div class="small">(Butona bastıkça farklı melodiler ve mesajlar gelecek.)</div>
 
-        noButton.addEventListener("mouseover", function() {
-            const maxX = window.innerWidth - 100; // Ekran sınırlarını aşmasın
-            const maxY = window.innerHeight - 100;
+    <div class="hearts" id="hearts"></div>
+  </div>
 
-            let x = Math.random() * maxX;
-            let y = Math.random() * maxY;
+<script>
+/* -- Ayarlar ve veri -- */
+const MESSAGES = [
+  "Bugün kalbine huzur dolsun ✨",
+  "Sen çok özel bir insansın, unutma 💛",
+  "Hayatına güzellikler yağsın 🌸",
+  "Her şey senin için yumuşacık olsun 🌿",
+  "Kötü hissettiğin anlarda bile yalnız değilsin 🤍",
+  "Kalbinin güzelliği yolunu aydınlatsın 🌟",
+  "Bugün senin için iyi şeyler olacak, hissediyorum 🌈",
+  "Ruhun hafiflesin, gözlerin parlasın ✨",
+  "Bir nefes al, rahatla — her şey yoluna girecek 🌬️",
+  "Seninle gurur duyuyorum, küçük bir tebessüm gönderiyorum 😊"
+];
 
-            // Butonun tamamen ekrandan çıkmasını engelle
-            if (x < 50) x = 50;
-            if (y < 50) y = 50;
+const SCALE = [261.63,293.66,329.63,349.23,392.00,440.00,493.88,523.25]; // C maj
+const playBtn = document.getElementById('playBtn');
+const msgBox = document.getElementById('msg');
+const hearts = document.getElementById('hearts');
+const reverbToggle = document.getElementById('reverbToggle');
+const nightToggle = document.getElementById('nightToggle');
 
-            noButton.style.left = `${x}px`;
-            noButton.style.top = `${y}px`;
-        });
+let audioCtx = null;
+let masterGain = null;
+let reverbNode = null;
+let delayNode = null;
+let feedback = null;
 
-        function yesClick() {
-            alert("Biliyorum, sen de barışmak istiyorsun! ❤️");
-        }
-    </script>
+/* -- Utility: random -- */
+function randItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function rand(min,max){ return Math.random()*(max-min)+min; }
 
+/* -- Ses altyapısı kurulum -- */
+function ensureAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.85;
+  masterGain.connect(audioCtx.destination);
+
+  // Basit 'reverb' benzeri efekt: delay + feedback + lowpass
+  delayNode = audioCtx.createDelay();
+  delayNode.delayTime.value = 0.18;
+
+  feedback = audioCtx.createGain();
+  feedback.gain.value = 0.28;
+
+  const lowpass = audioCtx.createBiquadFilter();
+  lowpass.type = 'lowpass';
+  lowpass.frequency.value = 1200;
+
+  delayNode.connect(feedback);
+  feedback.connect(lowpass);
+  lowpass.connect(delayNode);
+
+  // sonlandırma: reverbNode olarak lowpass çıkışını kullan
+  reverbNode = lowpass;
+  // reverb off için reverbNode'u doğrudan masterGain'e bağlamıyoruz; route yapacağız oynatmada
+}
+
+/* -- Melodi üretimi ve çalma -- */
+function playMelodyOnce({length=6, tempo=0.34, useReverb=false} = {}){
+  ensureAudio();
+  // küçük "piano-like" envelope ve hafif atkı
+  const now = audioCtx.currentTime;
+  const baseTime = now + 0.05;
+
+  for(let i=0;i<length;i++){
+    const freq = randItem(SCALE) * (Math.random() < 0.12 ? 0.5 : 1); // küçük sürpriz olarak bazen alt oktav
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    // dalga tipi hafifçe değişken (sine + small detune için triangle/triangle)
+    osc.type = Math.random() < 0.6 ? 'sine' : 'triangle';
+    osc.frequency.setValueAtTime(freq, baseTime + i*tempo);
+
+    const envStart = baseTime + i*tempo;
+    gain.gain.setValueAtTime(0.0001, envStart);
+    gain.gain.linearRampToValueAtTime(0.26, envStart + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, envStart + tempo*0.95);
+
+    // hafif stereo effect (panning)
+    let nodeChainOut = gain;
+
+    // panner
+    if (audioCtx.createStereoPanner) {
+      const p = audioCtx.createStereoPanner();
+      p.pan.value = rand(-0.55,0.55);
+      gain.connect(p);
+      nodeChainOut = p;
+    }
+
+    // bağlanma: reverb açık ise reverb -> master, ayrıca direkt de master (kuru+wet)
+    osc.connect(gain);
+    nodeChainOut.connect(masterGain);
+    if(useReverb){
+      nodeChainOut.connect(delayNode);
+      // delay loop already connected to lowpass (reverbNode)
+      reverbNode.connect(masterGain);
+    }
+
+    osc.start(envStart);
+    osc.stop(envStart + tempo*0.92);
+  }
+}
+
+/* -- UI davranışı -- */
+function showMessage(text){
+  msgBox.textContent = text;
+  msgBox.classList.remove('show');
+  // force reflow for animation restart
+  void msgBox.offsetWidth;
+  msgBox.classList.add('show');
+}
+
+function spawnHearts(count = 6){
+  // temizle eski kalpler
+  // (eklemeye devam ederek hafif overlapping efekt olur)
+  for(let i=0;i<count;i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    const left = rand(15,85);
+    h.style.left = left + '%';
+    h.style.top = (100 + rand(10,60)) + '%'; // alt taraftan başlasın
+    h.style.width = `${rand(12,26)}px`;
+    h.style.height = h.style.width;
+    h.style.opacity = rand(0.7,1);
+    h.style.animationDuration = `${rand(3.8,6.6)}s`;
+    hearts.appendChild(h);
+    // temizlecek timeout
+    setTimeout(()=> h.remove(), 7600);
+  }
+}
+
+/* -- Buton handler -- */
+playBtn.addEventListener('click', async () => {
+  // bazı tarayıcılarda kullanıcı etkileşimiyle resume gerekli
+  if(!audioCtx || audioCtx.state === 'suspended') {
+    try { await ensureAudio(), audioCtx.resume(); } catch(e){}
+  }
+
+  const useReverb = reverbToggle.checked;
+  // kısa rastgele varyasyonlar
+  const len = Math.floor(rand(4,7));
+  const tempo = rand(0.28,0.42);
+
+  playBtn.setAttribute('aria-pressed','true');
+  playBtn.disabled = true;
+  playBtn.style.transform = 'translateY(1px) scale(.995)';
+
+  playMelodyOnce({length:len, tempo:tempo, useReverb:useReverb});
+
+  // mesaj göster
+  showMessage(randItem(MESSAGES));
+
+  // görsel kalpler
+  spawnHearts(Math.round(rand(4,8)));
+
+  // biraz beklemeden buton tekrar aktif olsun (melodi süresine göre)
+  setTimeout(()=>{
+    playBtn.disabled = false;
+    playBtn.setAttribute('aria-pressed','false');
+    playBtn.style.transform = '';
+  }, Math.max(900, Math.round(len*tempo*1000) + 200));
+});
+
+/* -- Gece modu toggle -- */
+nightToggle.addEventListener('change', (e) => {
+  if(e.target.checked){
+    document.documentElement.style.setProperty('--bg1','#0f1226');
+    document.documentElement.style.setProperty('--bg2','#0b1630');
+    document.documentElement.style.setProperty('--accent','#6b4bff');
+    document.documentElement.style.setProperty('--text','#f2f2f8');
+    document.body.style.background = 'linear-gradient(135deg,var(--bg1),var(--bg2))';
+    document.querySelector('.card').style.background = 'rgba(10,12,24,0.7)';
+  } else {
+    document.documentElement.style.setProperty('--bg1','#ffeaf8');
+    document.documentElement.style.setProperty('--bg2','#e7f3ff');
+    document.documentElement.style.setProperty('--accent','#ff8fd6');
+    document.documentElement.style.setProperty('--text','#2b2b2b');
+    document.body.style.background = 'linear-gradient(135deg,var(--bg1),var(--bg2),#fff6ec)';
+    document.querySelector('.card').style.background = 'rgba(255,255,255,0.85)';
+  }
+});
+
+/* -- Accessibility: space/enter to press button -- */
+playBtn.addEventListener('keydown', (ev) => {
+  if(ev.key === ' ' || ev.key === 'Enter') { ev.preventDefault(); playBtn.click(); }
+});
+
+/* -- İlk açılışta hafif bir hoşgeldin mesajı (isteğe bağlı) -- */
+window.addEventListener('load', ()=>{
+  setTimeout(()=> showMessage("Bir melodiyle küçük bir huzur gönderiyorum…"), 600);
+});
+</script>
 </body>
 </html>
